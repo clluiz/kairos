@@ -1,0 +1,19 @@
+{
+  "name": "kairos-api",
+  "version": "1.0.0",
+  "description": "Api to schedule appointments",
+  "main": "index.js",
+  "scripts": {
+    "start": "platformatic db start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cleiton Luiz <cleitonluiz.dev@gmail.com> (https://www.cleitonluizdev.com.br/)",
+  "license": "ISC",
+  "dependencies": {
+    "platformatic": "^0.10.0"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "typescript": "^4.9.4"
+  }
+}

@@ -1,0 +1,13 @@
+version: "3"
+services:
+  kairos_db:
+    image: postgis/postgis:15-3.3
+    container_name: kairos_db_container
+    env_file:
+      - database.env
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+    ports:
+      - 6543:5432
+volumes:
+  database-data:
