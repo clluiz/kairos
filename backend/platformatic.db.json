@@ -11,7 +11,7 @@
     "schema": [
       "main"
     ],
-    "graphql": false
+    "graphql": true
   },
   "migrations": {
     "dir": "./migrations",
