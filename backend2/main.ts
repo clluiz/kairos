@@ -4,7 +4,7 @@ import closeWithGrace, { Signals } from 'close-with-grace'
 import autoload from '@fastify/autoload'
 import { join } from 'desm'
 
-interface CloseWithGraceCallbackOptions {
+export interface CloseWithGraceCallbackOptions {
   err?: Error,
   signal?: Signals,
   manual?: boolean,
@@ -28,7 +28,7 @@ if (esMain(import.meta)) {
 
   await app.listen({ port: 3000 })
 
-  closeWithGrace({ delay: 500 }, async function ({ err }:CloseWithGraceCallbackOptions) {
+  closeWithGrace({ delay: 500 }, async function ({ err }: CloseWithGraceCallbackOptions) {
     if (err) {
       console.error(err)
     }
