@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model tenant {
+  id           Int            @id @default(autoincrement())
+  name         String
+  logo         String
+  professional professional[]
+  place        place[]
+}
+
+model user {
+  id           Int            @id @default(autoincrement())
+  login        String
+  password     String
+  customer     customer[]
+  professional professional[]
+}
+
+model customer {
+  id         Int          @id @default(autoincrement())
+  name       String
+  cpf        String       @unique @db.VarChar(14)
+  phone      String       @unique @db.VarChar(13)
+  user       user         @relation(fields: [user_id], references: [id])
+  user_id    Int
+  scheduling scheduling[]
+}
+
+model professional {
+  id         Int          @id @default(autoincrement())
+  name       String
+  phone      String       @unique @db.VarChar(13)
+  user       user         @relation(fields: [user_id], references: [id])
+  user_id    Int
+  tenant     tenant       @relation(fields: [tenant_id], references: [id])
+  tenant_id  Int
+  scheduling scheduling[]
+}
+
+model address {
+  id          Int     @id @default(autoincrement())
+  public_area String
+  number      String?
+  city        String
+  state       String  @db.VarChar(2)
+  country     String
+  zip_code    String?
+  complement  String
+  place       place[]
+}
+
+model place {
+  id         Int          @id @default(autoincrement())
+  address    address      @relation(fields: [address_id], references: [id])
+  address_id Int
+  tenant     tenant       @relation(fields: [tenant_id], references: [id])
+  tenant_id  Int
+  scheduling scheduling[]
+}
+
+model scheduling {
+  id              Int          @id @default(autoincrement())
+  start_time      DateTime
+  end_time        DateTime
+  day             DateTime
+  description     String
+  place           place        @relation(fields: [place_id], references: [id])
+  place_id        Int
+  customer        customer     @relation(fields: [customer_id], references: [id])
+  customer_id     Int
+  professional    professional @relation(fields: [professional_id], references: [id])
+  professional_id Int
+}
