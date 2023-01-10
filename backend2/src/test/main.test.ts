@@ -1,13 +1,13 @@
-import { expect, test, afterEach } from 'vitest'
-import { main } from '../main.js'
+import { expect, test, afterAll } from 'vitest'
+import { main } from '../main'
 
 let app
-afterEach(async () => {
+afterAll(async () => {
   await app.close()
 })
 
 test('hello world', async () => {
-  app = await main()
+  app = await main({})
   const response = await app.inject({
     method: 'GET',
     url: '/',

@@ -4,10 +4,10 @@ import { Scheduling } from "./model";
 export function SchedulingService(app : KairosInstance) {
   return {
     async create(scheduling : Scheduling | null) {
-      return "asd123"
+      return {}
     },
     async list() {
-      return "lista"
+      return []
     }
   }
 }
