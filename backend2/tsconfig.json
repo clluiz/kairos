@@ -115,5 +115,9 @@
     // files to track  work from these directories
     "excludeDirectories": ["**/node_modules", "dist"],
     "excludeFiles": ["ecosystem.config.cjs"]
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   }
 }

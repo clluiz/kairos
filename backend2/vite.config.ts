@@ -4,6 +4,9 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   test: {
     globals: true,
-    include: ['src/test/*.test.{js,ts}']
+    include: ['src/test/*.test.{js,ts}'],
+    deps: {
+      inline: true
+    }
   },
 })
