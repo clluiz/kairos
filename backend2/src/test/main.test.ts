@@ -16,3 +16,15 @@ test('hello world', async () => {
   expect(response.statusCode).toBe(200)
   expect(response.json()).toEqual({ hello: 'world' })
 })
+
+test('scheduling list', async () => {
+  app = await main({})
+  const response = await app.inject({
+    method: 'GET',
+    url: '/scheduling',
+  })
+
+  expect(response.statusCode).toBe(200)
+  expect(response.json()).toEqual([])
+})
+
