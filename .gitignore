@@ -1,6 +1,4 @@
 node_modules/
-.env
-database.env
 dist/
 *.log
 /target/
