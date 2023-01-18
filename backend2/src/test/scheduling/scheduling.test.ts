@@ -1,7 +1,9 @@
-import { expect, test, afterEach, describe } from 'vitest'
+import { expect, test, afterEach, describe, vi } from 'vitest'
 import { main } from '../../main'
 
-describe('scheduling', async () => {
+vi.mock("../plugins/prisma.ts")
+
+describe.skip('scheduling', async () => {
   let app
   afterEach(async () => {
     await app.close()

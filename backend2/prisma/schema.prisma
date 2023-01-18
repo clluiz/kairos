@@ -13,7 +13,7 @@ datasource db {
 model tenant {
   id           Int            @id @default(autoincrement())
   name         String
-  logo         String
+  logo         String?
   professional professional[]
   place        place[]
 }

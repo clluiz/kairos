@@ -3,6 +3,7 @@ import fastify from 'fastify'
 import closeWithGrace, { Signals } from 'close-with-grace'
 import autoload from '@fastify/autoload'
 import { join } from 'desm'
+import { KairosInstance } from './kairosInstance'
 
 export interface CloseWithGraceCallbackOptions {
   err?: Error,
@@ -10,7 +11,7 @@ export interface CloseWithGraceCallbackOptions {
   manual?: boolean,
 }
 
-export async function main (options: any) {
+export async function main (options: any) : Promise<KairosInstance> {
   const app = fastify()
   app.register(autoload, {
     dir: join(import.meta.url, './plugins'),
@@ -20,7 +21,7 @@ export async function main (options: any) {
     dir: join(import.meta.url, './routes'),
     options
   })
-  return app
+  return app as unknown as KairosInstance
 }
 
 if (esMain(import.meta)) {
