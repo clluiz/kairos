@@ -1,6 +1,6 @@
 import { expect, test, beforeEach, describe, afterAll } from 'vitest'
-import { main } from '../main'
-import { KairosInstance } from '../kairosInstance'
+import { create } from '../app'
+import { KairosInstance } from '../types/kairos'
 import { clearDatabase } from './utils'
 
 let app : KairosInstance
@@ -20,7 +20,7 @@ describe('main', () => {
 
   test('hello world', async () => {
 
-    app = await main({})
+    app = await create({})
 
     const response = await app.inject({
       method: 'GET',
@@ -32,7 +32,7 @@ describe('main', () => {
   })
   
   test('scheduling list', async () => {
-    app = await main({})
+    app = await create({})
     const response = await app.inject({
       method: 'GET',
       url: '/scheduling',

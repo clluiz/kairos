@@ -1,5 +1,6 @@
 import closeWithGrace from "close-with-grace";
-import { CloseWithGraceCallbackOptions, main } from "./main.js";
+import { create } from "./app.js";
+import { CloseWithGraceCallbackOptions } from "./types/closeWithGraceCallBackOptins.js";
 
 declare var process : {
   env: {
@@ -9,7 +10,7 @@ declare var process : {
 }
 
 const start = async () => {
-  const app = await main({})
+  const app = await create({})
 
   await app.listen({ port: process.env.PORT || 3000 })
 

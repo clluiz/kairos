@@ -1,16 +1,16 @@
 import { expect, test, afterEach, describe, vi } from 'vitest'
-import { main } from '../../main'
+import { create } from '../../app'
 
 vi.mock("../plugins/prisma.ts")
 
-describe.skip('scheduling', async () => {
+describe('scheduling', async () => {
   let app
   afterEach(async () => {
     await app.close()
   })
 
   test('should list all schedulings', async () => {
-    app = await main({})
+    app = await create({})
     const response = await app.inject({
       method: 'GET',
       url: '/scheduling',

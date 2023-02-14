@@ -1,4 +1,5 @@
-import { KairosInstance } from "../kairosInstance";
+
+import { KairosInstance } from "../types/kairos";
 import { Scheduling } from "./model";
 
 export function SchedulingService(app : KairosInstance) {

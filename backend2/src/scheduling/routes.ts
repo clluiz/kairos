@@ -1,4 +1,4 @@
-import { KairosInstance } from "../kairosInstance"
+import { KairosInstance } from "../types/kairos"
 
 export default async function(app : KairosInstance) {
   app.get('/scheduling', async () => {

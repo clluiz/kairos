@@ -1,21 +1,17 @@
 import esMain from 'es-main'
 import fastify from 'fastify'
-import closeWithGrace, { Signals } from 'close-with-grace'
+import closeWithGrace from 'close-with-grace'
 import autoload from '@fastify/autoload'
 import { join } from 'desm'
-import { KairosInstance } from './kairosInstance'
-
-export interface CloseWithGraceCallbackOptions {
-  err?: Error,
-  signal?: Signals,
-  manual?: boolean,
-}
-
-export async function main (options: any) : Promise<KairosInstance> {
+import { KairosInstance } from './types/kairos'
+import { CloseWithGraceCallbackOptions } from './types/closeWithGraceCallBackOptins'
+ 
+export async function create (options: any) : Promise<KairosInstance> {
   const app = fastify()
   app.register(autoload, {
     dir: join(import.meta.url, './plugins'),
-    options
+    options,
+    ignoreFilter: options.ignoreFilter,
   })
   app.register(autoload, {
     dir: join(import.meta.url, './routes'),
@@ -25,7 +21,7 @@ export async function main (options: any) : Promise<KairosInstance> {
 }
 
 if (esMain(import.meta)) {
-  const app = await main({})
+  const app = await create({})
 
   await app.listen({ port: 3000 })
 
