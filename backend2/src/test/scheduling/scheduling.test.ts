@@ -1,23 +1,179 @@
 import { expect, test, afterEach, describe, vi } from 'vitest'
 import { create } from '../../app'
+import prisma from '../../prisma/client'
+import { clearDatabase } from '../utils'
+import { faker } from '@faker-js/faker'
+import fakerBR from 'faker-br'
+import { DayOfWeek } from '@prisma/client'
 
-vi.mock("../plugins/prisma.ts")
+
+//import prisma from '../../prisma/__mocks__/client'
+
+//vi.mock('../../prisma/__mocks__/client')
+
+// Testes que devem ser feitos:
+// Retornar erro ao tentar fazer um agendamento em horários que interseccionam o horário de outro agendamento
+// Retornar erro ao tentar fazer um agendamento com um profissional que não está disponível para o lugar
+// Retornar erro ao tentar fazer um agendamento com um profissional que não está disponível no horário
+// Cancelar agendamento
 
 describe('scheduling', async () => {
   let app
   afterEach(async () => {
-    await app.close()
+    if(app)
+      await app.close()
+    await clearDatabase(prisma)
   })
 
-  test('should list all schedulings', async () => {
+  test('it should not exits two schedulings with interposed times for the same place and professional', async () => {
     app = await create({})
-    const response = await app.inject({
-      method: 'GET',
-      url: '/scheduling',
+
+    // setup scenario
+    // create tenant, professional, customer, address, place and professional availability
+
+    const tenant = await prisma.tenant.create({
+      data: {
+        name: faker.company.name()
+      }
     })
-  
-    expect(response.statusCode).toBe(200)
-    expect(response.json()).toEqual([])
+    
+    const userForCustomer = await prisma.user.create({
+      data: {
+        login: faker.random.alpha({ count: 10 }),
+        password: faker.random.alphaNumeric(20),
+      }
+    })
+
+    const firstCustomer = await prisma.customer.create({
+      data: {
+        name: faker.name.fullName(),
+        phone: faker.phone.number('## #####-####'),
+        userId: userForCustomer.id,
+        cpf: fakerBR.br.cpf()
+      }
+    })
+
+    const userForProfessional = await prisma.user.create({
+      data: {
+        login: faker.random.alpha({ count: 10 }),
+        password: faker.random.alphaNumeric(20),
+      }
+    })    
+
+    const professional = await prisma.professional.create({
+      data: {
+        name: faker.name.fullName(),
+        phone: faker.phone.number('## #####-####'),
+        userId: userForProfessional.id,
+        tenantId: tenant.id,
+      }
+    })
+
+    const address = await prisma.address.create({
+      data: {
+        public_area: faker.address.street(),
+        number: faker.address.buildingNumber(),
+        city: faker.address.cityName(),
+        state: faker.address.stateAbbr(),
+        country: faker.address.country(),
+        zipCode: faker.address.zipCode(),
+      }
+    })
+
+    const place = await prisma.place.create({
+      data: {
+        tenantId: tenant.id,
+        addressId: address.id
+      }
+    })
+
+    const startTime = new Date()
+    startTime.setHours(8,0)
+
+    const endTime = new Date()
+    endTime.setHours(18,0)
+
+    await prisma.professionalAvailability.createMany({
+      data: [{
+        day: DayOfWeek.MONDAY,
+        startTime: startTime,
+        endTime: endTime,
+        professionalId: professional.id,
+        placeId: place.id
+      }, {
+        day: DayOfWeek.TUESDAY,
+        startTime: startTime,
+        endTime: endTime,
+        professionalId: professional.id,
+        placeId: place.id
+      }, {
+        day: DayOfWeek.WEDNESDAY,
+        startTime: startTime,
+        endTime: endTime,
+        professionalId: professional.id,
+        placeId: place.id
+      }, {
+        day: DayOfWeek.THURSDAY,
+        startTime: startTime,
+        endTime: endTime,
+        professionalId: professional.id,
+        placeId: place.id
+      },{
+        day: DayOfWeek.FRYDAY,
+        startTime: startTime,
+        endTime: endTime,
+        professionalId: professional.id,
+        placeId: place.id
+      },{
+        day: DayOfWeek.SATURDAY,
+        startTime: startTime,
+        endTime: endTime,
+        professionalId: professional.id,
+        placeId: place.id
+      }, {
+        day: DayOfWeek.SUNDAY,
+        startTime: startTime,
+        endTime: endTime,
+        professionalId: professional.id,
+        placeId: place.id
+      }]
+    })
+
+    const scheduling = prisma.scheduling.create({
+      data: {
+        startTime: new Date(24, 1, 2023, 9, 0),
+        endTime: new Date(24, 1, 2023, 10, 0),
+        professionalId: professional.id,
+        customerId: firstCustomer.id,
+        placeId: place.id,
+        description: "Consulta 1",
+      }
+    })
+
+    const customer2 = await prisma.customer.create({
+      data: {
+        name: faker.name.fullName(),
+        phone: faker.phone.number('## #####-####'),
+        userId: userForCustomer.id,
+        cpf: fakerBR.br.cpf()
+      }
+    })
+
+    const response = await app.inject({
+      method: 'POST',
+      url: '/scheduling',
+      payload: {
+        startTime: new Date(24, 1, 2023, 9, 0),
+        endTime: new Date(24, 1, 2023, 10, 30),
+        description: "Consulta",
+        placeId: place.id,
+        professionalId: professional.id,
+        customerId: customer2.id,
+      }
+    })
+
+    expect(response.statusCode).toBe(500)
+    expect(response.payload.message).toBe("Já existe um agendamento marcado para este horário")
   })
 })
 
