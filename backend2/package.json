@@ -8,7 +8,7 @@
     "start:dev": "pm2 start ecosystem.config.cjs && tsc -w",
     "migrate:dev": "dotenv -e .env.development prisma migrate dev --name kairos",
     "test": "dotenv -e .env.test prisma db push && dotenv -e .env.test vitest",
-    "test:coverage": "dotenv -e .env.test prisma db push && dotenv -e .env.test vitest --coverage"
+    "test:coverage": "dotenv -e .env.test prisma db push && dotenv -e .env.test vitest run -- --coverage"
   },
   "keywords": [],
   "author": "Cleiton Luiz <cleiton.dev@proton.me>",

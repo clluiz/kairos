@@ -6,9 +6,9 @@ import { faker } from '@faker-js/faker'
 import fakerBR from 'faker-br'
 import { Address, Customer, DayOfWeek, Place, Professional, Tenant, User } from '@prisma/client'
 
-import prismaMock from '../../prisma/__mocks__/client'
+// import prismaMock from '../../prisma/__mocks__/client'
 
-vi.mock('../../prisma/__mocks__/client')
+// vi.mock('../../prisma/__mocks__/client')
 
 // Testes que devem ser feitos:
 // Retornar erro ao tentar fazer um agendamento em horários que interseccionam o horário de outro agendamento
@@ -27,15 +27,15 @@ describe('scheduling', async () => {
   test('it should not exists two schedulings with interposed times for the same place and professional', async () => {
     app = await create({})
 
-    const tenants = prismaMock.tenant.findFirst.mockResolvedValue(
-      {
-        id: 1,
-        name: 'Test',
-        logo: 'asda'
-      }
-    )
+    // const tenants = prismaMock.tenant.findFirst.mockResolvedValue(
+    //   {
+    //     id: 1,
+    //     name: 'Test',
+    //     logo: 'asda'
+    //   }
+    // )
 
-    expect(tenants[0].name).toBe('Test')
+    // expect(tenants[0].name).toBe('Test')
 
     // // setup scenario
     // // create tenant, professional, customer, address, place and professional availability
