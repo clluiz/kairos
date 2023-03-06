@@ -1,5 +1,4 @@
 
-import { KairosInstance } from "../types/kairos"
 import prisma from "../prisma/client"
 import type { Scheduling } from "@prisma/client"
 
@@ -10,7 +9,7 @@ export async function list() {
 export async function create(scheduling : Scheduling) {
 
   //
-  const interposedScheduling = await prisma.scheduling.findFirst({
+  const interposedScheduling : Scheduling | null = await prisma.scheduling.findFirst({
     where: {
       OR: [
         {

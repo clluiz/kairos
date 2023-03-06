@@ -3,8 +3,8 @@ import fastify from 'fastify'
 import closeWithGrace from 'close-with-grace'
 import autoload from '@fastify/autoload'
 import { join } from 'desm'
-import { KairosInstance } from './types/kairos'
-import { CloseWithGraceCallbackOptions } from './types/closeWithGraceCallBackOptins'
+import type { KairosInstance } from './types/kairos'
+import type { CloseWithGraceCallbackOptions } from './types/closeWithGraceCallBackOptions'
  
 export async function create (options: any) : Promise<KairosInstance> {
   const app = fastify()

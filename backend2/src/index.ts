@@ -1,6 +1,6 @@
 import closeWithGrace from "close-with-grace";
 import { create } from "./app.js";
-import { CloseWithGraceCallbackOptions } from "./types/closeWithGraceCallBackOptins.js";
+import type { CloseWithGraceCallbackOptions } from "./types/closeWithGraceCallBackOptins.js";
 
 declare var process : {
   env: {

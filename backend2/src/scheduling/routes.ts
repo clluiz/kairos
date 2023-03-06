@@ -1,7 +1,6 @@
 import type { Scheduling } from "@prisma/client"
-import { FastifyRequest } from "fastify"
-import { KairosInstance } from "../types/kairos"
-import { create, list } from "./services"
+import type { KairosInstance } from "../types/kairos"
+import { create, list } from "./services.js"
 
 export default async function(app : KairosInstance) {
   app.get('/scheduling', async () => {
@@ -9,9 +8,12 @@ export default async function(app : KairosInstance) {
   })
 
   app.post<{
-    Body: Scheduling
-  }>('/scheduling', async (req) => {
-    const result = await create(req.body)
-    return result
+    Body: Scheduling,
+    
+  }>('/scheduling', (req, reply) => {
+
+    create(req.body)
+      .then(scheduling => reply.send(scheduling))
+      .catch(error => reply.code(409).send(error))
   })
 }

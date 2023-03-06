@@ -6,7 +6,11 @@ export default defineConfig({
     globals: true,
     include: ['src/test/**/*.test.{js,ts}'],
     deps: {
-      inline: true
-    }
-  },
+     inline: true
+    },
+    coverage: {
+      provider: 'istanbul',
+      reporter: ['html', 'text']
+    },
+  }
 })
