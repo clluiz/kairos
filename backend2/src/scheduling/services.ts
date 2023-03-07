@@ -6,45 +6,89 @@ export async function list() {
   return prisma.scheduling.findMany()
 }
 
-export async function create(scheduling : Scheduling) {
+async function isProfessionalAvailableForInTimeRange(professionalId: number, startTime: Date, endTime: Date): Promise<boolean> {
 
-  //
-  const interposedScheduling : Scheduling | null = await prisma.scheduling.findFirst({
+  // const p = await prisma.scheduling.findFirst({
+  //   where: {
+  //     professionalId,
+  //     AND: {
+  //       OR: [
+  //         {
+  //           startTime: { gte: startTime }
+  //         },
+  //         {
+  //           endTime: { lte: endTime }
+  //         }
+  //       ]
+  //     }
+  //   }
+  // })
+
+  // return p == null
+  return true
+}
+
+async function isPlaceAvailableForInTimeRange(placeId: number, startTime: Date, endTime: Date): Promise<boolean> {
+
+  // const p = await prisma.scheduling.findFirst({
+  //   where: {
+  //     professionalId,
+  //     AND: {
+  //       OR: [
+  //         {
+  //           startTime: { gte: new}
+  //         }
+  //       ]
+  //     }
+  //   }
+  // })
+
+  return true;
+}
+
+async function isCustomerAvailableForInTimeRange(customerId: number, startTime: Date, endTime: Date): Promise<boolean> {
+
+  const scheduling = await prisma.scheduling.findFirst({
     where: {
-      OR: [
-        {
-          startTime: { gte: scheduling.startTime }
-        },
-        {
-          endTime: { lte: scheduling.endTime }
-        }
-      ]
+      customerId,
+      AND: {
+        OR: [
+          {
+            startTime: { gte: startTime }
+          },
+          {
+            endTime: { lte: endTime }
+          }
+        ]
+      }
     }
   })
 
-  if(interposedScheduling) {
-    throw new Error("Já existe um agendamento marcado para este horário")
+  return scheduling == null
+}
+
+export async function create(newScheduling : Scheduling) {
+
+  if(!(await isCustomerAvailableForInTimeRange(newScheduling.customerId, newScheduling.startTime, newScheduling.endTime))) {
+    throw new Error("Já existe um agendamento marcado para este horário com esse cliente")
+  
+  }  
+  if(!(await isProfessionalAvailableForInTimeRange(newScheduling.professionalId, newScheduling.startTime, newScheduling.endTime))) {
+    throw new Error("Já existe um agendamento marcado para este horário com esse profissional")
+  }
+
+  if(!(await isPlaceAvailableForInTimeRange(newScheduling.placeId, newScheduling.startTime, newScheduling.endTime))) {
+    throw new Error("Já existe um agendamento marcado para este horário com neste local")
   }
 
   return await prisma.scheduling.create({
     data: {
-      startTime: scheduling.startTime,
-      endTime: scheduling.endTime,
-      professionalId: scheduling.professionalId,
-      customerId: scheduling.customerId,
-      placeId: scheduling.placeId,
-      description: scheduling.description
+      startTime: newScheduling.startTime,
+      endTime: newScheduling.endTime,
+      professionalId: newScheduling.professionalId,
+      customerId: newScheduling.customerId,
+      placeId: newScheduling.placeId,
+      description: newScheduling.description
     }
   })
 }
-
-// export function SchedulingService(app : KairosInstance) {
-//   return {
-//     async create(scheduling : Scheduling | null) {
-//       return {}
-//     },
-//     async list() {
-//       return prisma.scheduling.findMany()
-//     }
-//   }
-// }
