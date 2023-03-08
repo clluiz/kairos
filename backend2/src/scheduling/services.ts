@@ -7,11 +7,10 @@ export async function list() {
 }
 
 async function isProfessionalAvailableForInTimeRange(professionalId: number, startTime: Date, endTime: Date): Promise<boolean> {
+  
   const scheduling = await prisma.scheduling.findFirst({
     where: {
-      professionalId: {
-        equals: professionalId, 
-      },
+      professionalId,
       AND: {
         OR: [
           {
@@ -36,20 +35,29 @@ async function isProfessionalAvailableForInTimeRange(professionalId: number, sta
 
 async function isPlaceAvailableForInTimeRange(placeId: number, startTime: Date, endTime: Date): Promise<boolean> {
 
-  // const p = await prisma.scheduling.findFirst({
-  //   where: {
-  //     professionalId,
-  //     AND: {
-  //       OR: [
-  //         {
-  //           startTime: { gte: new}
-  //         }
-  //       ]
-  //     }
-  //   }
-  // })
+  const scheduling = await prisma.scheduling.findFirst({
+    where: {
+      placeId,
+      AND: {
+        OR: [
+          {
+            startTime: { 
+              gte: startTime,
+              lte: endTime, 
+            }
+          },
+          {
+            endTime: {
+              gte: startTime, 
+              lte: endTime 
+            }
+          }
+        ]
+      }
+    }
+  })
 
-  return true;
+  return scheduling == null
 }
 
 async function isCustomerAvailableForInTimeRange(customerId: number, startTime: Date, endTime: Date): Promise<boolean> {
@@ -77,6 +85,7 @@ async function isCustomerAvailableForInTimeRange(customerId: number, startTime: 
   })
 
   return scheduling == null
+
 }
 
 export async function create(newScheduling : Scheduling) {
