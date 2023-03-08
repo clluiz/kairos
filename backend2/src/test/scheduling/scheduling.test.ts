@@ -150,7 +150,7 @@ describe('scheduling', async () => {
           placeId: place1.id,
           description: "Consulta 1",
         }
-      })
+    })
 
     app = await create({})
 
@@ -171,8 +171,82 @@ describe('scheduling', async () => {
     expect(response.json().message).toBe("Já existe um agendamento marcado para este horário com esse cliente")
   })
 
-  test.skip('it should not create a new scheduling for the same professional with interposed times', async () => {
+  test('it should not create a new scheduling for the same professional with interposed times', async () => {
 
+    const tenant : Tenant = await prisma.tenant.create({
+      data: {
+        name: faker.company.name()
+      }
+    })
+
+    const professional : Professional = await createProfessionalForTenant(tenant.id)
+
+    const address : Address = await prisma.address.create({
+      data: {
+        public_area: faker.address.street(),
+        number: faker.address.buildingNumber(),
+        city: faker.address.cityName(),
+        state: faker.address.stateAbbr(),
+        country: faker.address.country(),
+        zipCode: faker.address.zipCode(),
+      }
+    })   
+    
+    const place : Place = await prisma.place.create({
+      data: {
+        tenantId: tenant.id,
+        addressId: address.id
+      }
+    })  
+
+    const startTime : Date = new Date()
+    startTime.setHours(8,0)
+
+    const endTime : Date = new Date()
+    endTime.setHours(18,0)
+
+    await prisma.professionalAvailability.createMany({
+      data: [{
+        day: DayOfWeek.MONDAY,
+        startTime: startTime,
+        endTime: endTime,
+        professionalId: professional.id,
+        placeId: place.id
+      }]
+    })
+    
+    const customer1 : Customer = await createCustomer()
+    const customer2 : Customer = await createCustomer()
+
+    await prisma.scheduling.create({
+      data: {
+        startTime: new Date(24, 2, 2023, 13, 0),
+        endTime: new Date(24, 2, 2023, 15, 30),
+        professionalId: professional.id,
+        placeId: place.id,
+        description: "Consulta 1",
+        customerId: customer1.id
+      }
+    })
+
+    app = await create({})
+    
+    const response = await app.inject({
+      method: 'POST',
+      url: '/scheduling',
+      payload: {
+        startTime: new Date(24, 2, 2023, 9, 0),
+        endTime: new Date(24, 2, 2023, 13, 30),
+        description: "Consulta no mesmo horário com o mesmo profissional",
+        placeId: place.id,
+        professionalId: professional.id,
+        customerId: customer2.id,
+      }
+    })
+    
+    expect(response.statusCode).toBe(409)
+    expect(response.json().message).toBe("Já existe um agendamento marcado para este horário com esse profissional")    
+    
   })
 
   test.skip('it should not create a new scheduling for the same place with interposed times', async () => {

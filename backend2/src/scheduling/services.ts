@@ -7,25 +7,31 @@ export async function list() {
 }
 
 async function isProfessionalAvailableForInTimeRange(professionalId: number, startTime: Date, endTime: Date): Promise<boolean> {
+  const scheduling = await prisma.scheduling.findFirst({
+    where: {
+      professionalId: {
+        equals: professionalId, 
+      },
+      AND: {
+        OR: [
+          {
+            startTime: { 
+              gte: startTime,
+              lte: endTime, 
+            }
+          },
+          {
+            endTime: {
+              gte: startTime, 
+              lte: endTime 
+            }
+          }
+        ]
+      }
+    }
+  })
 
-  // const p = await prisma.scheduling.findFirst({
-  //   where: {
-  //     professionalId,
-  //     AND: {
-  //       OR: [
-  //         {
-  //           startTime: { gte: startTime }
-  //         },
-  //         {
-  //           endTime: { lte: endTime }
-  //         }
-  //       ]
-  //     }
-  //   }
-  // })
-
-  // return p == null
-  return true
+  return scheduling == null
 }
 
 async function isPlaceAvailableForInTimeRange(placeId: number, startTime: Date, endTime: Date): Promise<boolean> {
@@ -54,10 +60,16 @@ async function isCustomerAvailableForInTimeRange(customerId: number, startTime: 
       AND: {
         OR: [
           {
-            startTime: { gte: startTime }
+            startTime: { 
+              gte: startTime,
+              lte: endTime, 
+            }
           },
           {
-            endTime: { lte: endTime }
+            endTime: {
+              gte: startTime, 
+              lte: endTime 
+            }
           }
         ]
       }
@@ -73,6 +85,7 @@ export async function create(newScheduling : Scheduling) {
     throw new Error("Já existe um agendamento marcado para este horário com esse cliente")
   
   }  
+  
   if(!(await isProfessionalAvailableForInTimeRange(newScheduling.professionalId, newScheduling.startTime, newScheduling.endTime))) {
     throw new Error("Já existe um agendamento marcado para este horário com esse profissional")
   }
