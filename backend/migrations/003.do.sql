@@ -1,1 +1,0 @@
-ALTER TABLE main.scheduling ADD COLUMN customer_id INTEGER REFERENCES main.customer(id);

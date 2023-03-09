@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id           Int            @id @default(autoincrement())
+  name         String
+  logo         String?
+  professional Professional[]
+  place        Place[]
+
+  @@map("tenant")
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  login        String
+  password     String
+  customer     Customer[]
+  professional Professional[]
+
+  @@map("user")
+}
+
+model Customer {
+  id         Int          @id @default(autoincrement())
+  name       String
+  cpf        String       @unique @db.VarChar(14)
+  phone      String       @unique @db.VarChar(13)
+  user       User         @relation(fields: [userId], references: [id])
+  userId     Int          @map("user_id")
+  scheduling Scheduling[]
+
+  @@map("customer")
+}
+
+model Professional {
+  id                       Int                        @id @default(autoincrement())
+  name                     String
+  phone                    String                     @unique @db.VarChar(13)
+  user                     User                       @relation(fields: [userId], references: [id])
+  userId                   Int                        @map("user_id")
+  tenant                   Tenant                     @relation(fields: [tenantId], references: [id])
+  tenantId                 Int                        @map("tenant_id")
+  scheduling               Scheduling[]
+  professionalAvailability ProfessionalAvailability[]
+
+  @@map("professional")
+}
+
+model Address {
+  id          Int     @id @default(autoincrement())
+  public_area String  @map("public_area")
+  number      String?
+  city        String
+  state       String  @db.VarChar(2)
+  country     String
+  zipCode     String? @map("zip_code")
+  complement  String?
+  place       Place[]
+
+  @@map("address")
+}
+
+model Place {
+  id                       Int                        @id @default(autoincrement())
+  address                  Address                    @relation(fields: [addressId], references: [id])
+  addressId                Int                        @map("address_id")
+  tenant                   Tenant                     @relation(fields: [tenantId], references: [id])
+  tenantId                 Int                        @map("tenant_id")
+  scheduling               Scheduling[]
+  professionalAvailability ProfessionalAvailability[]
+
+  @@map("place")
+}
+
+model Scheduling {
+  id             Int          @id @default(autoincrement())
+  startTime      DateTime     @map("start_time")
+  endTime        DateTime     @map("end_time")
+  description    String
+  place          Place        @relation(fields: [placeId], references: [id])
+  placeId        Int          @map("place_id")
+  customer       Customer     @relation(fields: [customerId], references: [id])
+  customerId     Int          @map("customer_id")
+  professional   Professional @relation(fields: [professionalId], references: [id])
+  professionalId Int          @map("professional_id")
+
+  @@map("scheduling")
+}
+
+enum DayOfWeek {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRYDAY
+  SATURDAY
+}
+
+model ProfessionalAvailability {
+  id             Int          @id @default(autoincrement())
+  day            DayOfWeek
+  startTime      DateTime     @map("start_time") @db.Time()
+  endTime        DateTime     @map("end_time") @db.Time()
+  professionalId Int          @map("professional_id")
+  professional   Professional @relation(fields: [professionalId], references: [id])
+  placeId        Int          @map("place_id")
+  place          Place        @relation(fields: [placeId], references: [id])
+
+  @@map("professional_availability")
+}
