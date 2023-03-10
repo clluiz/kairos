@@ -1,7 +1,7 @@
-import type { Signals } from 'close-with-grace'
+import type { Signals } from "close-with-grace";
 
 export interface CloseWithGraceCallbackOptions {
-    err?: Error,
-    signal?: Signals,
-    manual?: boolean,
-  }
+  err?: Error;
+  signal?: Signals;
+  manual?: boolean;
+}
