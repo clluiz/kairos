@@ -1,6 +1,6 @@
-import prisma from "../prisma/client";
-import type { Scheduling } from "@prisma/client";
-import { extractDayOfWeek } from "../dates";
+import prisma from "../prisma/client"
+import type { Scheduling } from "@prisma/client"
+import { extractDayOfWeek } from "../dates"
 
 async function isProfessionalAvailableForInTimeRange(
   professionalId: number,
@@ -27,9 +27,9 @@ async function isProfessionalAvailableForInTimeRange(
         ],
       },
     },
-  });
+  })
 
-  return scheduling == null;
+  return scheduling == null
 }
 
 async function isPlaceAvailableForInTimeRange(
@@ -57,9 +57,9 @@ async function isPlaceAvailableForInTimeRange(
         ],
       },
     },
-  });
+  })
 
-  return scheduling == null;
+  return scheduling == null
 }
 
 async function isCustomerAvailableForInTimeRange(
@@ -87,9 +87,9 @@ async function isCustomerAvailableForInTimeRange(
         ],
       },
     },
-  });
+  })
 
-  return scheduling == null;
+  return scheduling == null
 }
 
 async function isProfessionalAvailable(
@@ -119,9 +119,9 @@ async function isProfessionalAvailable(
         lte: endTime,
       },
     },
-  });
+  })
 
-  return availability != null;
+  return availability != null
 }
 
 export async function create(newScheduling: Scheduling) {
@@ -134,7 +134,7 @@ export async function create(newScheduling: Scheduling) {
   ) {
     throw new Error(
       "Já existe um agendamento marcado para este horário com esse cliente"
-    );
+    )
   }
 
   if (
@@ -146,7 +146,7 @@ export async function create(newScheduling: Scheduling) {
   ) {
     throw new Error(
       "Já existe um agendamento marcado para este horário com esse profissional"
-    );
+    )
   }
 
   if (
@@ -158,7 +158,7 @@ export async function create(newScheduling: Scheduling) {
   ) {
     throw new Error(
       "Já existe um agendamento marcado para este horário com neste local"
-    );
+    )
   }
 
   if (
@@ -171,7 +171,7 @@ export async function create(newScheduling: Scheduling) {
   ) {
     throw new Error(
       "O profissional escolhido não está disponível para esse horário, ou lugar"
-    );
+    )
   }
 
   return await prisma.scheduling.create({
@@ -183,9 +183,9 @@ export async function create(newScheduling: Scheduling) {
       placeId: newScheduling.placeId,
       description: newScheduling.description,
     },
-  });
+  })
 }
 
 export async function list() {
-  return prisma.scheduling.findMany();
+  return prisma.scheduling.findMany()
 }

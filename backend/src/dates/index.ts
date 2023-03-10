@@ -1,25 +1,25 @@
-import { DayOfWeek } from "@prisma/client";
-import { getDay } from "date-fns";
+import { DayOfWeek } from "@prisma/client"
+import { getDay } from "date-fns"
 
 export function extractDayOfWeek(date: Date): DayOfWeek {
-  const dayIndex = getDay(date);
+  const dayIndex = getDay(date)
 
   switch (dayIndex) {
     case 0:
-      return DayOfWeek.SUNDAY;
+      return DayOfWeek.SUNDAY
     case 1:
-      return DayOfWeek.MONDAY;
+      return DayOfWeek.MONDAY
     case 2:
-      return DayOfWeek.TUESDAY;
+      return DayOfWeek.TUESDAY
     case 3:
-      return DayOfWeek.WEDNESDAY;
+      return DayOfWeek.WEDNESDAY
     case 4:
-      return DayOfWeek.THURSDAY;
+      return DayOfWeek.THURSDAY
     case 5:
-      return DayOfWeek.FRYDAY;
+      return DayOfWeek.FRYDAY
     case 6:
-      return DayOfWeek.SATURDAY;
+      return DayOfWeek.SATURDAY
     default:
-      throw new Error("Dia da semana inválido");
+      throw new Error("Dia da semana inválido")
   }
 }
