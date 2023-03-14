@@ -24,7 +24,8 @@
     "fastify": "^4.10.2",
     "fastify-plugin": "^4.3.0",
     "pm2": "^5.2.2",
-    "prisma": "^4.8.0"
+    "prisma": "^4.8.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

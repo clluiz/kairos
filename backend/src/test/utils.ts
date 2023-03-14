@@ -8,7 +8,7 @@ export async function clearDatabase(prismaInstance: PrismaClient) {
   const tables = tablenames
     .map(({ tablename }) => tablename)
     .filter((name) => name !== "_prisma_migrations")
-    .map((name) => `"main"."${name}"`)
+    .map((name) => `main.${name}`)
     .join(", ")
 
   try {
