@@ -74,6 +74,111 @@ describe("scheduling", async () => {
     await clearDatabase(prisma)
   })
 
+  test("it should create a new scheduling", async () => {
+    const tenant: Tenant = await prisma.tenant.create({
+      data: {
+        name: faker.company.name(),
+      },
+    })
+
+    const customer: Customer = await createCustomer()
+    const professional: Professional = await createProfessionalForTenant(
+      tenant.id
+    )
+    const address: Address = await prisma.address.create({
+      data: {
+        public_area: faker.address.street(),
+        number: faker.address.buildingNumber(),
+        city: faker.address.cityName(),
+        state: faker.address.stateAbbr(),
+        country: faker.address.country(),
+        zipCode: faker.address.zipCode(),
+      },
+    })
+    const place: Place = await prisma.place.create({
+      data: {
+        tenantId: tenant.id,
+        addressId: address.id,
+      },
+    })
+    const startTime: Date = new Date()
+    startTime.setHours(8, 0, 0, 0)
+
+    const endTime: Date = new Date()
+    endTime.setHours(18, 0, 0, 0)
+
+    await prisma.professionalAvailability.createMany({
+      data: [
+        {
+          day: DayOfWeek.MONDAY,
+          startTime: startTime,
+          endTime: endTime,
+          professionalId: professional.id,
+          placeId: place.id,
+        },
+        {
+          day: DayOfWeek.TUESDAY,
+          startTime: startTime,
+          endTime: endTime,
+          professionalId: professional.id,
+          placeId: place.id,
+        },
+        {
+          day: DayOfWeek.WEDNESDAY,
+          startTime: startTime,
+          endTime: endTime,
+          professionalId: professional.id,
+          placeId: place.id,
+        },
+        {
+          day: DayOfWeek.THURSDAY,
+          startTime: startTime,
+          endTime: endTime,
+          professionalId: professional.id,
+          placeId: place.id,
+        },
+        {
+          day: DayOfWeek.FRYDAY,
+          startTime: startTime,
+          endTime: endTime,
+          professionalId: professional.id,
+          placeId: place.id,
+        },
+        {
+          day: DayOfWeek.SATURDAY,
+          startTime: startTime,
+          endTime: endTime,
+          professionalId: professional.id,
+          placeId: place.id,
+        },
+        {
+          day: DayOfWeek.SUNDAY,
+          startTime: startTime,
+          endTime: endTime,
+          professionalId: professional.id,
+          placeId: place.id,
+        },
+      ],
+    })
+
+    app = await create({})
+
+    const response = await app.inject({
+      method: "POST",
+      url: "/scheduling",
+      payload: {
+        startTime: new Date(2023, 1, 20, 9, 0, 0),
+        endTime: new Date(2023, 1, 20, 10, 30, 0),
+        description: "Consulta no mesmo horário com outro profissional",
+        placeId: place.id,
+        professionalId: professional.id,
+        customerId: customer.id,
+      },
+    })
+
+    expect(response.statusCode).toBe(200)
+  })
+
   test("it should not create a new scheduling for the same customer with interposed times", async () => {
     const tenant1: Tenant = await prisma.tenant.create({
       data: {
