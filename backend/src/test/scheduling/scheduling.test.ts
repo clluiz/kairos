@@ -266,7 +266,7 @@ describe("scheduling", async () => {
           endTime: endTime,
           professionalId: professional.id,
           placeId: place.id,
-        }
+        },
       ],
     })
 

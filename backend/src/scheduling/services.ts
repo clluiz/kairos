@@ -98,7 +98,6 @@ async function isProfessionalAvailable(
   startTime: Date,
   endTime: Date
 ): Promise<boolean> {
-
   const availability = await prisma.professionalAvailability.findFirst({
     where: {
       professionalId,
@@ -115,11 +114,22 @@ async function isProfessionalAvailable(
     },
   })
   return availability != null
-
 }
 
 export async function create(newScheduling: Scheduling) {
-  
+  if (
+    !(await isProfessionalAvailable(
+      newScheduling.professionalId,
+      newScheduling.placeId,
+      newScheduling.startTime,
+      newScheduling.endTime
+    ))
+  ) {
+    throw new Error(
+      "O profissional escolhido não está disponível para esse horário ou lugar"
+    )
+  }
+
   if (
     !(await isCustomerAvailableForInTimeRange(
       newScheduling.customerId,
@@ -131,13 +141,14 @@ export async function create(newScheduling: Scheduling) {
       "Já existe um agendamento marcado para este horário com esse cliente"
     )
   }
-  
-  const a = await isProfessionalAvailableForInTimeRange(
-    newScheduling.professionalId,
-    newScheduling.startTime,
-    newScheduling.endTime
-  )
-  if (!a) {
+
+  if (
+    !(await isProfessionalAvailableForInTimeRange(
+      newScheduling.professionalId,
+      newScheduling.startTime,
+      newScheduling.endTime
+    ))
+  ) {
     throw new Error(
       "Já existe um agendamento marcado para este horário com esse profissional"
     )
@@ -152,19 +163,6 @@ export async function create(newScheduling: Scheduling) {
   ) {
     throw new Error(
       "Já existe um agendamento marcado para este horário com neste local"
-    )
-  }
-
-  if (
-    !(await isProfessionalAvailable(
-      newScheduling.professionalId,
-      newScheduling.placeId,
-      newScheduling.startTime,
-      newScheduling.endTime
-    ))
-  ) {
-    throw new Error(
-      "O profissional escolhido não está disponível para esse horário ou lugar"
     )
   }
 
