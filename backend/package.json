@@ -9,7 +9,8 @@
     "migrate:dev": "dotenv -e .env.development prisma migrate dev --name kairos",
     "test": "dotenv -e .env.test prisma db push && dotenv -e .env.test vitest",
     "test:coverage": "dotenv -e .env.test prisma db push && dotenv -e .env.test vitest run -- --coverage",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "Cleiton Luiz <cleiton.dev@proton.me>",
@@ -33,8 +34,11 @@
     "@tsconfig/node-lts-strictest-esm": "^18.12.1",
     "@types/date-fns": "^2.6.0",
     "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
     "@vitest/coverage-istanbul": "^0.27.3",
     "dotenv-cli": "^6.0.0",
+    "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
     "eslit": "^6.0.0",
     "faker-br": "^0.4.1",
@@ -52,10 +56,9 @@
     }
   },
   "lint-staged": {
-    "**/*.{js,ts,json}": [
-      "eslint --fix", 
-      "prettier --write",
-      "git add"
+    "**/*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
     ]
   }
 }
