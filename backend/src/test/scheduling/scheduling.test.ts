@@ -188,7 +188,7 @@ describe("scheduling", async () => {
     )
   })
 
-  test.only("it should not create a new scheduling for the same professional with interposed times", async () => {
+  test("it should not create a new scheduling for the same professional with interposed times", async () => {
     const tenant: Tenant = await prisma.tenant.create({
       data: {
         name: faker.company.name(),
@@ -290,8 +290,8 @@ describe("scheduling", async () => {
       method: "POST",
       url: "/scheduling",
       payload: {
-        startTime: new Date(2023, 2, 24, 9, 0),
-        endTime: new Date(2023, 2, 24, 13, 30),
+        startTime: new Date(2023, 2, 1, 9, 0),
+        endTime: new Date(2023, 2, 1, 13, 30),
         description: "Consulta no mesmo horário com o mesmo profissional",
         placeId: place.id,
         professionalId: professional.id,
