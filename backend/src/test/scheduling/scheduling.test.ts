@@ -132,10 +132,10 @@ describe("scheduling", async () => {
     })
 
     const startTime: Date = new Date()
-    startTime.setHours(8, 0)
+    startTime.setHours(8, 0, 0, 0)
 
     const endTime: Date = new Date()
-    endTime.setHours(18, 0)
+    endTime.setHours(18, 0, 0, 0)
 
     await prisma.professionalAvailability.createMany({
       data: [
@@ -158,8 +158,8 @@ describe("scheduling", async () => {
 
     await prisma.scheduling.create({
       data: {
-        startTime: new Date(2023, 1, 24, 9, 0),
-        endTime: new Date(2023, 1, 24, 10, 0),
+        startTime: new Date(2023, 1, 20, 9, 0, 0),
+        endTime: new Date(2023, 1, 20, 10, 0, 0),
         professionalId: professional1.id,
         customerId: customer.id,
         placeId: place1.id,
@@ -173,8 +173,8 @@ describe("scheduling", async () => {
       method: "POST",
       url: "/scheduling",
       payload: {
-        startTime: new Date(2023, 1, 24, 9, 0),
-        endTime: new Date(2023, 1, 24, 10, 30),
+        startTime: new Date(2023, 1, 20, 9, 0, 0),
+        endTime: new Date(2023, 1, 20, 10, 30, 0),
         description: "Consulta no mesmo horário com outro profissional",
         placeId: place2.id,
         professionalId: professional2.id,
@@ -367,8 +367,8 @@ describe("scheduling", async () => {
 
     await prisma.scheduling.create({
       data: {
-        startTime: new Date(2023, 2, 24, 13, 0),
-        endTime: new Date(2023, 2, 24, 15, 30),
+        startTime: new Date(2023, 2, 20, 13, 0),
+        endTime: new Date(2023, 2, 20, 15, 30),
         professionalId: professional.id,
         placeId: place.id,
         description: "Consulta 1",
@@ -382,8 +382,8 @@ describe("scheduling", async () => {
       method: "POST",
       url: "/scheduling",
       payload: {
-        startTime: new Date(2023, 2, 24, 9, 0),
-        endTime: new Date(2023, 2, 24, 13, 30),
+        startTime: new Date(2023, 2, 20, 9, 0),
+        endTime: new Date(2023, 2, 20, 13, 30),
         description: "Consulta no mesmo horário com o mesmo profissional",
         placeId: place.id,
         professionalId: professional2.id,
