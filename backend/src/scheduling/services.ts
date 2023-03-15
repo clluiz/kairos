@@ -106,10 +106,10 @@ async function isProfessionalAvailable(
         equals: extractDayOfWeek(startTime),
       },
       startTime: {
-        lte: startTime
+        lte: startTime,
       },
       endTime: {
-        gte: endTime
+        gte: endTime,
       },
     },
   })
