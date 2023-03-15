@@ -22,6 +22,7 @@ export function extractDayOfWeek(date: Date | string): DayOfWeek {
     case 6:
       return DayOfWeek.SATURDAY
     default:
-      throw new Error("Dia da semana inválido")
+      throw new 
+      Error("Dia da semana inválido")
   }
 }
