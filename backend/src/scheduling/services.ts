@@ -10,6 +10,7 @@ async function isProfessionalAvailableForInTimeRange(
   const scheduling = await prisma.scheduling.findFirst({
     where: {
       professionalId,
+      active: true,
       AND: {
         OR: [
           {
@@ -40,6 +41,7 @@ async function isPlaceAvailableForInTimeRange(
   const scheduling = await prisma.scheduling.findFirst({
     where: {
       placeId,
+      active: true,
       AND: {
         OR: [
           {
@@ -70,6 +72,7 @@ async function isCustomerAvailableForInTimeRange(
   const scheduling = await prisma.scheduling.findFirst({
     where: {
       customerId,
+      active: true,
       AND: {
         OR: [
           {
@@ -174,6 +177,17 @@ export async function create(newScheduling: Scheduling) {
       customerId: newScheduling.customerId,
       placeId: newScheduling.placeId,
       description: newScheduling.description,
+    },
+  })
+}
+
+export async function cancel(id: number) {
+  return await prisma.scheduling.update({
+    where: {
+      id,
+    },
+    data: {
+      active: false,
     },
   })
 }

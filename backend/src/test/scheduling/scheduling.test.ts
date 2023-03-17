@@ -18,12 +18,7 @@ import {
 
 //vi.mock('../../prisma/client')
 
-// Testes que devem ser feitos:
-// Não cadastrar mais de 1 agendamento para o mesmo cliente em horários sobrepostos : DONE
-// Não cadastrar mais de 1 agendamento para o mesmo profissional em horários sobrepostos : DONE
-// Não cadastrar mais de 1 agendamento para o mesmo lugar em horários sobrepostos : DONE
-// Testar fim e inicio de agendamento em sequencia
-// Cancelar agendamento
+// Testar fim e inicio de agendamento em sequencia:
 
 async function createProfessionalForTenant(
   tenandId: number
@@ -572,7 +567,83 @@ describe("scheduling", async () => {
     )
   })
 
-  // test.skip('it should not create a scheduling when a place is not available', async () => {
+  test("it should be possible to create a new scheduling on the same time of a canceled scheduling", async () => {
+    const tenant: Tenant = await prisma.tenant.create({
+      data: {
+        name: faker.company.name(),
+      },
+    })
 
-  // })
+    const customer: Customer = await createCustomer()
+    const customer2: Customer = await createCustomer()
+    const professional: Professional = await createProfessionalForTenant(
+      tenant.id
+    )
+    const address: Address = await prisma.address.create({
+      data: {
+        public_area: faker.address.street(),
+        number: faker.address.buildingNumber(),
+        city: faker.address.cityName(),
+        state: faker.address.stateAbbr(),
+        country: faker.address.country(),
+        zipCode: faker.address.zipCode(),
+      },
+    })
+    const place: Place = await prisma.place.create({
+      data: {
+        tenantId: tenant.id,
+        addressId: address.id,
+      },
+    })
+    const startTime: Date = new Date()
+    startTime.setHours(8, 0, 0, 0)
+
+    const endTime: Date = new Date()
+    endTime.setHours(18, 0, 0, 0)
+
+    await prisma.professionalAvailability.createMany({
+      data: [
+        {
+          day: DayOfWeek.MONDAY,
+          startTime: startTime,
+          endTime: endTime,
+          professionalId: professional.id,
+          placeId: place.id,
+        },
+      ],
+    })
+
+    const scheduling = await prisma.scheduling.create({
+      data: {
+        startTime: new Date(2023, 1, 20, 9, 0, 0),
+        endTime: new Date(2023, 1, 20, 10, 0, 0),
+        professionalId: professional.id,
+        customerId: customer.id,
+        placeId: place.id,
+        description: "Consulta 1",
+      },
+    })
+
+    app = await create({})
+
+    const deleteResponse = await app.inject({
+      method: "DELETE",
+      url: `/scheduling/${scheduling.id}`,
+    })
+
+    const response = await app.inject({
+      method: "POST",
+      url: "/scheduling",
+      payload: {
+        startTime: new Date(2023, 1, 20, 9, 0, 0),
+        endTime: new Date(2023, 1, 20, 10, 0, 0),
+        professionalId: professional.id,
+        customerId: customer2.id,
+        placeId: place.id,
+        description: "Consulta 1",
+      },
+    })
+
+    expect(response.statusCode).toBe(200)
+  })
 })

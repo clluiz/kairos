@@ -93,6 +93,7 @@ model Scheduling {
   customerId     Int          @map("customer_id")
   professional   Professional @relation(fields: [professionalId], references: [id])
   professionalId Int          @map("professional_id")
+  active         Boolean      @default(true)
 
   @@map("scheduling")
 }
