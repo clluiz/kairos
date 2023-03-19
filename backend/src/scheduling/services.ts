@@ -21,7 +21,7 @@ async function isProfessionalAvailableForInTimeRange(
           },
           {
             endTime: {
-              gte: startTime,
+              gt: startTime,
               lte: endTime,
             },
           },
@@ -52,7 +52,7 @@ async function isPlaceAvailableForInTimeRange(
           },
           {
             endTime: {
-              gte: startTime,
+              gt: startTime,
               lte: endTime,
             },
           },
