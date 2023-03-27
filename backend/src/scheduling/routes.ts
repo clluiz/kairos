@@ -1,5 +1,7 @@
 import type { Scheduling } from "@prisma/client"
+import { notifyViaWhatsapp } from "../externalServices/whatsapp"
 import type { KairosInstance } from "../types/kairos"
+import SchedulingError from "./exception"
 import { cancel, create, list } from "./services.js"
 
 interface GetSchedulingParams {
@@ -16,7 +18,12 @@ export default async function (app: KairosInstance) {
   }>("/scheduling", (req, reply) => {
     create(req.body)
       .then((scheduling) => reply.send(scheduling))
-      .catch((error) => reply.code(409).send(error))
+      .catch((error) => {
+        if (error instanceof SchedulingError) {
+          reply.code(error.httpStatusCode).send(error)
+        }
+        reply.internalServerError()
+      })
   })
 
   app.delete<{

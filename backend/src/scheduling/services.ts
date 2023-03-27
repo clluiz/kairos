@@ -1,6 +1,7 @@
 import prisma from "../prisma/client"
 import type { Scheduling } from "@prisma/client"
 import { extractDayOfWeek } from "../dates"
+import SchedulingError from "./exception"
 
 async function isProfessionalAvailableForInTimeRange(
   professionalId: number,
@@ -64,7 +65,7 @@ async function isPlaceAvailableForInTimeRange(
   return scheduling == null
 }
 
-async function isCustomerAvailableForInTimeRange(
+async function isCustomerAvailableInTimeRange(
   customerId: number,
   startTime: Date,
   endTime: Date
@@ -128,19 +129,21 @@ export async function create(newScheduling: Scheduling) {
       newScheduling.endTime
     ))
   ) {
-    throw new Error(
+    throw new SchedulingError(
+      409,
       "O profissional escolhido não está disponível para esse horário ou lugar"
     )
   }
 
   if (
-    !(await isCustomerAvailableForInTimeRange(
+    !(await isCustomerAvailableInTimeRange(
       newScheduling.customerId,
       newScheduling.startTime,
       newScheduling.endTime
     ))
   ) {
-    throw new Error(
+    throw new SchedulingError(
+      409,
       "Já existe um agendamento marcado para este horário com esse cliente"
     )
   }
@@ -152,7 +155,8 @@ export async function create(newScheduling: Scheduling) {
       newScheduling.endTime
     ))
   ) {
-    throw new Error(
+    throw new SchedulingError(
+      409,
       "Já existe um agendamento marcado para este horário com esse profissional"
     )
   }
@@ -164,7 +168,8 @@ export async function create(newScheduling: Scheduling) {
       newScheduling.endTime
     ))
   ) {
-    throw new Error(
+    throw new SchedulingError(
+      409,
       "Já existe um agendamento marcado para este horário com neste local"
     )
   }
