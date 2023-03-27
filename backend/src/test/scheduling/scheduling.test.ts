@@ -23,14 +23,14 @@ import {
 async function createProfessionalForTenant(
   tenandId: number
 ): Promise<Professional> {
-  const user = await prisma.user.create({
+  const user: User = await prisma.user.create({
     data: {
       login: faker.random.alpha({ count: 10 }),
       password: faker.random.alphaNumeric(20),
     },
   })
 
-  const professional = await prisma.professional.create({
+  const professional: Professional = await prisma.professional.create({
     data: {
       name: faker.name.fullName(),
       phone: faker.phone.number("## #####-####"),
