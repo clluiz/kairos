@@ -1,4 +1,4 @@
-import prisma from "../prisma/client"
+import prisma from "@/prisma/client"
 
 const TAMANHO_MINIMO_SENHA: number = 8
 const PADRAO_SENHA: RegExp =

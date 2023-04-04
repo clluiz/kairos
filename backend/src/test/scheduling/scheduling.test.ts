@@ -1,7 +1,7 @@
 import { expect, test, afterEach, describe, vi } from "vitest"
-import { create } from "../../app"
-import prisma from "../../prisma/client"
-import { clearDatabase } from "../utils"
+import { create } from "@/app"
+import prisma from "@/prisma/client"
+import { clearDatabase } from "@/test/utils"
 import { faker } from "@faker-js/faker"
 import fakerBR from "faker-br"
 import {

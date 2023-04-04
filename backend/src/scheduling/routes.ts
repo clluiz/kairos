@@ -1,6 +1,6 @@
 import type { Scheduling } from "@prisma/client"
-import { notifyViaWhatsapp } from "../externalServices/whatsapp"
-import type { KairosInstance } from "../types/kairos"
+import { notifyViaWhatsapp } from "@/externalServices/whatsapp"
+import type { KairosInstance } from "@/types/kairos"
 import SchedulingError from "./exception"
 import { cancel, create, list } from "./services.js"
 

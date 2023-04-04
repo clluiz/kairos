@@ -1,7 +1,7 @@
 import { expect, test, beforeEach, describe, afterAll } from "vitest"
-import { create } from "../app"
-import { KairosInstance } from "../types/kairos"
-import { clearDatabase } from "./utils"
+import { create } from "@/app"
+import { KairosInstance } from "@/types/kairos"
+import { clearDatabase } from "@/test/utils"
 
 let app: KairosInstance
 
