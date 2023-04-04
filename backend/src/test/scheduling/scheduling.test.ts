@@ -18,8 +18,6 @@ import {
 
 //vi.mock('../../prisma/client')
 
-// Testar fim e inicio de agendamento em sequencia:
-
 async function createProfessionalForTenant(
   tenandId: number
 ): Promise<Professional> {

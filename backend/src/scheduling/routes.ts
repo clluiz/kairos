@@ -9,9 +9,17 @@ interface GetSchedulingParams {
 }
 
 export default async function (app: KairosInstance) {
-  app.get("/scheduling", async () => {
-    return list()
-  })
+  // app.get("/scheduling/:idProfessional", async () => {
+  //   return list()
+  // })
+
+  // app.get("/scheduling/:idPlace", async () => {
+  //   return list()
+  // })
+
+  // app.get("/scheduling/:idCustomer", async () => {
+  //   return list()
+  // })
 
   app.post<{
     Body: Scheduling
