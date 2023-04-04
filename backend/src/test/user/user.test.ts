@@ -13,7 +13,7 @@ vi.mock("../../prisma/client")
 // Testar validação dos critérios de senha
 // Testar cadastro com usuário repetido
 
-describe.only("user management", async () => {
+describe("user management", async () => {
   // afterEach(async () => {
   //     await clearDatabase(prisma)
   //   })
@@ -23,7 +23,16 @@ describe.only("user management", async () => {
     const password = "123"
 
     await expect(() => create(login, password)).rejects.toThrowError(
-      "Verifique se sua senha tem pelo menos 8 letras, pelo menos uma letra maiuscula, uma letra minúscula, um número e um caracter especial"
+      "Sua senha deve ter menos 8 letras, pelo menos uma letra maiuscula, uma letra minúscula, um número e um caracter especial e não deve conter partes do login"
+    )
+  })
+
+  it("password should not have parts of the login", async () => {
+    const login = "elon"
+    const password = "@elonE123"
+
+    await expect(() => create(login, password)).rejects.toThrowError(
+      "Sua senha deve ter menos 8 letras, pelo menos uma letra maiuscula, uma letra minúscula, um número e um caracter especial e não deve conter partes do login"
     )
   })
 
