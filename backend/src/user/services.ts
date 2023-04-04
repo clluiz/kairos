@@ -16,13 +16,13 @@ export async function create(login: string, password: string) {
       "Verifique se sua senha tem pelo menos 8 letras, pelo menos uma letra maiuscula, uma letra minúscula, um número e um caracter especial"
     )
 
-  if (
-    (await prisma.user.findFirst({
-      where: {
-        login,
-      },
-    })) != null
-  ) {
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      login,
+    },
+  })
+
+  if (existingUser != null) {
     throw new Error("O login fornecido não está disponível")
   }
 
