@@ -16,7 +16,9 @@ export async function create(options: any): Promise<KairosInstance> {
   })
   app.register(autoload, {
     dir: join(import.meta.url, "./routes"),
-    options,
+    options: {
+      prefix: "/api",
+    },
   })
 
   app.register(sensible)

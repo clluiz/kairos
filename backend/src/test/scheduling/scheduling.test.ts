@@ -158,7 +158,7 @@ describe("scheduling", async () => {
 
     const response = await app.inject({
       method: "POST",
-      url: "/scheduling",
+      url: "/api/scheduling",
       payload: {
         startTime: new Date(2023, 1, 20, 9, 0, 0),
         endTime: new Date(2023, 1, 20, 10, 30, 0),
@@ -269,7 +269,7 @@ describe("scheduling", async () => {
 
     const response = await app.inject({
       method: "POST",
-      url: "/scheduling",
+      url: "/api/scheduling",
       payload: {
         startTime: new Date(2023, 1, 20, 9, 0, 0),
         endTime: new Date(2023, 1, 20, 10, 30, 0),
@@ -386,7 +386,7 @@ describe("scheduling", async () => {
 
     const response = await app.inject({
       method: "POST",
-      url: "/scheduling",
+      url: "/api/scheduling",
       payload: {
         startTime: new Date(2023, 2, 1, 9, 0),
         endTime: new Date(2023, 2, 1, 13, 30),
@@ -478,7 +478,7 @@ describe("scheduling", async () => {
 
     const response = await app.inject({
       method: "POST",
-      url: "/scheduling",
+      url: "/api/scheduling",
       payload: {
         startTime: new Date(2023, 2, 20, 9, 0),
         endTime: new Date(2023, 2, 20, 13, 30),
@@ -548,7 +548,7 @@ describe("scheduling", async () => {
 
     const response = await app.inject({
       method: "POST",
-      url: "/scheduling",
+      url: "/api/scheduling",
       payload: {
         startTime: new Date(2023, 2, 7, 9, 0),
         endTime: new Date(2023, 2, 7, 13, 30),
@@ -626,12 +626,12 @@ describe("scheduling", async () => {
 
     const deleteResponse = await app.inject({
       method: "DELETE",
-      url: `/scheduling/${scheduling.id}`,
+      url: `/api/scheduling/${scheduling.id}`,
     })
 
     const response = await app.inject({
       method: "POST",
-      url: "/scheduling",
+      url: "/api/scheduling",
       payload: {
         startTime: new Date(2023, 1, 20, 9, 0, 0),
         endTime: new Date(2023, 1, 20, 10, 0, 0),
@@ -706,7 +706,7 @@ describe("scheduling", async () => {
 
     const response = await app.inject({
       method: "POST",
-      url: "/scheduling",
+      url: "/api/scheduling",
       payload: {
         startTime: new Date(2023, 1, 20, 10, 0, 0),
         endTime: new Date(2023, 1, 20, 11, 0, 0),
