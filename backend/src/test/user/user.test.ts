@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from "vitest"
 
-import { create } from "@/user/services"
+import { create } from "../../user/services"
 
-import prismaMock from "@/prisma/__mocks__/client"
+import prismaMock from "../../prisma/__mocks__/client"
 import { faker } from "@faker-js/faker"
 
-vi.mock("@/prisma/client")
+vi.mock("../prisma/client")
 
 //TODO:
 // Testar validação dos critérios de senha

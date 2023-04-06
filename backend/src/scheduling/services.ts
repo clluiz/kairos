@@ -1,6 +1,6 @@
-import prisma from "@/prisma/client"
+import prisma from "../prisma/client"
 import type { Scheduling } from "@prisma/client"
-import { extractDayOfWeek } from "@/dates"
+import { extractDayOfWeek } from "../dates"
 import SchedulingError from "./exception"
 
 async function isProfessionalAvailableForInTimeRange(

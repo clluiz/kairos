@@ -1,7 +1,7 @@
-import { expect, test, afterEach, describe, vi } from "vitest"
-import { create } from "@/app"
-import prisma from "@/prisma/client"
-import { clearDatabase } from "@/test/utils"
+import { expect, test, afterEach, describe } from "vitest"
+import { create } from "../../app"
+import prisma from "../../prisma/client"
+import { clearDatabase } from "../utils"
 import { faker } from "@faker-js/faker"
 import fakerBR from "faker-br"
 import {
@@ -13,10 +13,6 @@ import {
   Tenant,
   User,
 } from "@prisma/client"
-
-//import prismaMock from '../../prisma/__mocks__/client'
-
-//vi.mock('../../prisma/client')
 
 async function createProfessionalForTenant(
   tenandId: number
@@ -154,7 +150,7 @@ describe("scheduling", async () => {
       ],
     })
 
-    app = await create({})
+    app = await create()
 
     const response = await app.inject({
       method: "POST",
@@ -265,7 +261,7 @@ describe("scheduling", async () => {
       },
     })
 
-    app = await create({})
+    app = await create()
 
     const response = await app.inject({
       method: "POST",
@@ -382,7 +378,7 @@ describe("scheduling", async () => {
       },
     })
 
-    app = await create({})
+    app = await create()
 
     const response = await app.inject({
       method: "POST",
@@ -474,7 +470,7 @@ describe("scheduling", async () => {
       },
     })
 
-    app = await create({})
+    app = await create()
 
     const response = await app.inject({
       method: "POST",
@@ -544,7 +540,7 @@ describe("scheduling", async () => {
       ],
     })
 
-    app = await create({})
+    app = await create()
 
     const response = await app.inject({
       method: "POST",
@@ -622,7 +618,7 @@ describe("scheduling", async () => {
       },
     })
 
-    app = await create({})
+    app = await create()
 
     const deleteResponse = await app.inject({
       method: "DELETE",
@@ -702,7 +698,7 @@ describe("scheduling", async () => {
       },
     })
 
-    app = await create({})
+    app = await create()
 
     const response = await app.inject({
       method: "POST",
