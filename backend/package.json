@@ -8,9 +8,7 @@
     "start:dev": "pm2 start ecosystem.config.cjs && tsc -w && tsc-alias",
     "migrate:dev": "dotenv -e .env.development prisma migrate dev --name kairos",
     "test": "dotenv -e .env.test prisma db push && dotenv -e .env.test vitest",
-    "test:coverage": "dotenv -e .env.test prisma db push && dotenv -e .env.test vitest run -- --coverage",
-    "precommit": "lint-staged",
-    "prepare": "husky install"
+    "test:coverage": "dotenv -e .env.test prisma db push && dotenv -e .env.test vitest run -- --coverage"
   },
   "keywords": [],
   "author": "Cleiton Luiz <cleiton.dev@proton.me>",
@@ -38,18 +36,12 @@
     "@typescript-eslint/parser": "^5.55.0",
     "@vitest/coverage-istanbul": "^0.27.3",
     "dotenv-cli": "^6.0.0",
-    "eslint": "^8.36.0",
-    "eslint-config-prettier": "^8.7.0",
     "eslit": "^6.0.0",
     "faker-br": "^0.4.1",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.0",
-    "prettier": "2.8.4",
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.8.5",
-    "typescript": "^4.9.4",
     "vitest": "0.27.0",
-    "vitest-mock-extended": "^1.0.8"
+    "vitest-mock-extended": "1.0.8"
   },
   "husky": {
     "hooks": {
