@@ -1,0 +1,14 @@
+{
+    "name": "kairos",
+    "private": true,
+    "workspaces": [
+      "webapp",
+      "backend"
+    ],
+    "dependencies": {
+    },
+    "devDependencies": {
+        
+    }
+  }
+  
