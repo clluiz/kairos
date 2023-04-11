@@ -1,26 +1,14 @@
 import type { Scheduling } from "@prisma/client"
 //import { notifyViaWhatsapp } from "@/externalServices/whatsapp"
-import type { KairosInstance } from "../types/kairos"
-import SchedulingError from "./exception"
-import { cancel, create } from "./services.js"
+import type { KairosInstance } from "../types/kairos.js"
+import SchedulingError from "./exception.js"
+import { cancel, create, list } from "./services.js"
 
 interface GetSchedulingParams {
   id: string
 }
 
 export default async function (app: KairosInstance) {
-  // app.get("/scheduling/:idProfessional", async () => {
-  //   return list()
-  // })
-
-  // app.get("/scheduling/:idPlace", async () => {
-  //   return list()
-  // })
-
-  // app.get("/scheduling/:idCustomer", async () => {
-  //   return list()
-  // })
-
   app.post<{
     Body: Scheduling
   }>("/scheduling", (req, reply) => {
@@ -40,6 +28,14 @@ export default async function (app: KairosInstance) {
   }>("/scheduling/:id", (req, reply) => {
     cancel(parseInt(req.params.id))
       .then((scheduling) => reply.send(scheduling))
+      .catch((error) => reply.code(500).send(error))
+  })
+
+  app.get<{
+    Reply: Scheduling[]
+  }>("/scheduling", (_, reply) => {
+    list()
+      .then((schedulings) => reply.send(schedulings))
       .catch((error) => reply.code(500).send(error))
   })
 }

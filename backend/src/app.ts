@@ -4,18 +4,11 @@ import closeWithGrace from "close-with-grace"
 import autoload from "@fastify/autoload"
 import sensible from "@fastify/sensible"
 import { join } from "desm"
-import type { KairosInstance } from "./types/kairos"
-import type { CloseWithGraceCallbackOptions } from "./types/closeWithGraceCallBackOptions"
-import path from "path"
+import type { KairosInstance } from "./types/kairos.js"
+import type { CloseWithGraceCallbackOptions } from "./types/closeWithGraceCallBackOptions.js"
 
 export async function create(): Promise<KairosInstance> {
   const app = fastify()
-
-  // app.register(autoload, {
-  //   dir: join(import.meta.url, "./plugins"),
-  //   options,
-  //   ignoreFilter: options.ignoreFilter,
-  // })
 
   app.register(autoload, {
     dir: join(import.meta.url, "./routes"),

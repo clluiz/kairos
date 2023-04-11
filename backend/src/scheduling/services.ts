@@ -1,7 +1,7 @@
-import prisma from "../prisma/client"
+import prisma from "../prisma/client.js"
 import type { Scheduling } from "@prisma/client"
-import { extractDayOfWeek } from "../dates"
-import SchedulingError from "./exception"
+import { extractDayOfWeek } from "../dates/index.js"
+import SchedulingError from "./exception.js"
 
 async function isProfessionalAvailableForInTimeRange(
   professionalId: number,
