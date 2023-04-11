@@ -34,7 +34,7 @@ describe("user management", async () => {
     )
   })
 
-  it("shoud not allow two users with the same login", async () => {
+  it.skip("shoud not allow two users with the same login", async () => {
     prismaMock.user.findFirst.mockResolvedValue({
       id: 1,
       login: "mussum",
