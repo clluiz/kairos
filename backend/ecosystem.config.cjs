@@ -6,7 +6,7 @@ module.exports = {
       out_file: "./kairos-api.log",
       error_file: "./kairos-api.log",
       watch: ["./dist"],
-      ignore_watch: ["node_modules"],
+      ignore_watch: ["node_modules", "./src/test/"],
       env: {
         NODE_ENV: "development",
         PORT: 1500,
