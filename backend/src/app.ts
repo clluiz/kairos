@@ -24,7 +24,7 @@ export async function create(): Promise<KairosInstance> {
 if (esMain(import.meta)) {
   const app = await create()
 
-  await app.listen({ port: 1986 })
+  await app.listen({ port: process.env.PORT })
 
   closeWithGrace(
     { delay: 500 },

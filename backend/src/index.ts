@@ -12,7 +12,7 @@ declare var process: {
 const start = async () => {
   const app = await create()
 
-  await app.listen({ port: 1986 })
+  await app.listen({ port: process.env.PORT })
 
   closeWithGrace(
     { delay: 500 },

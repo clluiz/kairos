@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start:dev": "pm2 start ecosystem.config.cjs && tsc -w",
+    "start:dev": "tsc -w & pm2 start ecosystem.config.cjs",
     "migrate:dev": "dotenv -e .env.development prisma migrate dev --name kairos",
     "test": "dotenv -e .env.test prisma db push && dotenv -e .env.test vitest",
     "test:coverage": "dotenv -e .env.test prisma db push && dotenv -e .env.test vitest run -- --coverage"
