@@ -6,6 +6,9 @@ import sensible from "@fastify/sensible"
 import { join } from "desm"
 import type { KairosInstance } from "./types/kairos.js"
 import type { CloseWithGraceCallbackOptions } from "./types/closeWithGraceCallBackOptions.js"
+import path from "path"
+
+let remixFastifyPlugin: any
 
 export async function create(): Promise<KairosInstance> {
   const app = fastify()
@@ -16,6 +19,17 @@ export async function create(): Promise<KairosInstance> {
       prefix: "/api",
     },
   })
+
+  if (process.env.MODE !== "test") {
+    remixFastifyPlugin = await import("@mcansh/remix-fastify").then(
+      (module) => module.remixFastifyPlugin
+    )
+    app.register(remixFastifyPlugin, {
+      build: path.join(process.cwd(), "../webapp/build/index.js"),
+      purgeRequireCacheInDevelopment: false,
+      unstable_earlyHints: true,
+    })
+  }
 
   app.register(sensible)
   return app as unknown as KairosInstance

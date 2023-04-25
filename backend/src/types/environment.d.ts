@@ -5,6 +5,7 @@ declare global {
     interface ProcessEnv {
       DATABASE_URL: string
       PORT: number
+      MODE: string
     }
   }
 }
